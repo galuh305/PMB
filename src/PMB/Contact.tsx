@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 function Contact() {
   useEffect(() => {
-  document.title = 'Contact - STMIK Jayanusa'
+  document.title = 'Contact - Universitas Jayanusa'
 }, [])
   return (
     <section>
@@ -10,7 +10,7 @@ function Contact() {
 
       <p>Hubungi kami untuk informasi pendaftaran.</p>
 
-      <p>Nama: STMIK Jayanusa</p>
+      <p>Nama: Universitas Jayanusa</p>
       <p>Email: Jayanusa.co.id</p>
       <p>Telepon: +628937492283</p>
       <p>Alamat: Jl.Damar</p>

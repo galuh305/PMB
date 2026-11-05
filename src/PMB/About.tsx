@@ -2,14 +2,14 @@ import { useEffect } from "react";
 
 function About() {
   useEffect(() => {
-    document.title = "About - STMIK Jayanusa";
+    document.title = "About - Universitas Jayanusa";
   }, []);
   return (
     <section>
       <h1>Tentang Kami</h1>
 
       <p>
-        STMIK Jayanusa merupakan perguruan tinggi yang berfokus pada bidang
+        Universitas Jayanusa merupakan perguruan tinggi yang berfokus pada bidang
         teknologi informasi dan komputer.
       </p>
 

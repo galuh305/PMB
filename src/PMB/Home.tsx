@@ -18,7 +18,7 @@ function Home() {
 
   // useEffect: mengubah judul browser
   useEffect(() => {
-    document.title = 'Home - STMIK Jayanusa'
+    document.title = 'Home - Universitas Jayanusa'
   }, [])
 
   // Data informasi kampus
@@ -38,10 +38,10 @@ function Home() {
 
   return (
     <section>
-      <h1>Selamat Datang di STMIK Jayanusa</h1>
+      <h1>Selamat Datang di Universitas Jayanusa</h1>
 
       <p>
-        Wujudkan masa depanmu bersama STMIK Jayanusa.
+        Wujudkan masa depanmu bersama Universitas Jayanusa.
       </p>
 
       <h3>Informasi Pendaftaran</h3>
