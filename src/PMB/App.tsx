@@ -2,7 +2,6 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './Navbar'
-import './App.css'
 
 const Home = lazy(() => import('./Home'))
 const About = lazy(() => import('./About'))
@@ -14,21 +13,27 @@ function App() {
     <>
       <Navbar />
 
-      <main style={{ 
-        backgroundColor: '#c1bebe', 
-        minHeight: 'calc(100vh - 60px)', 
-        padding: '20px' 
-        }}>
-            
-        <Suspense fallback={<p>Memuat halaman...</p>}>
+      <main className="min-h-screen bg-white">
+        <Suspense
+          fallback={
+            <p className="p-8 text-center text-gray-500">
+              Memuat halaman...
+            </p>
+          }
+        >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/pmb" element={<PMB />} />
             <Route path="/contact" element={<Contact />} />
+
             <Route
               path="*"
-              element={<h1>404 - Halaman tidak ditemukan</h1>}
+              element={
+                <h1 className="p-10 text-center text-2xl font-bold">
+                  404 - Halaman tidak ditemukan
+                </h1>
+              }
             />
           </Routes>
         </Suspense>

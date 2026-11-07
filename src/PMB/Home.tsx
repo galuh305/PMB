@@ -3,11 +3,16 @@ import { useState, useEffect, useContext, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { PendaftarContext } from './PendaftarContext'
 
+const informasi = [
+  'Pendaftaran Mahasiswa Baru',
+  'Program Studi',
+  'Informasi Kampus',
+  'Kegiatan Mahasiswa'
+]
+
 function Home() {
-  // useState: menyimpan kata pencarian
   const [pencarian, setPencarian] = useState('')
 
-  // useContext: mengambil data jumlah pendaftar
   const context = useContext(PendaftarContext)
 
   if (!context) {
@@ -16,20 +21,10 @@ function Home() {
 
   const { totalPendaftar } = context
 
-  // useEffect: mengubah judul browser
   useEffect(() => {
     document.title = 'Home - Universitas Jayanusa'
   }, [])
 
-  // Data informasi kampus
-  const informasi = [
-    'Pendaftaran Mahasiswa Baru',
-    'Program Studi',
-    'Informasi Kampus',
-    'Kegiatan Mahasiswa'
-  ]
-
-  // useMemo: memfilter informasi berdasarkan pencarian
   const hasilPencarian = useMemo(() => {
     return informasi.filter((item) =>
       item.toLowerCase().includes(pencarian.toLowerCase())
@@ -37,43 +32,85 @@ function Home() {
   }, [pencarian])
 
   return (
-    <section>
-      <h1>Selamat Datang di Universitas Jayanusa</h1>
+    <section className="mx-auto max-w-6xl px-6 py-12">
 
-      <p>
-        Wujudkan masa depanmu bersama Universitas Jayanusa.
-      </p>
+      <div className="rounded-xl bg-blue-700 px-8 py-16 text-white">
+        <h1 className="mb-4 text-3xl font-bold md:text-4xl">
+          Selamat Datang di Universitas Jayanusa
+        </h1>
 
-      <h3>Informasi Pendaftaran</h3>
+        <p className="mb-6 max-w-2xl text-lg text-blue-100">
+          Wujudkan masa depanmu bersama Universitas Jayanusa.
+          Kembangkan pengetahuan dan keterampilan di bidang teknologi.
+        </p>
 
-      <p>
-        Total pendaftar: {totalPendaftar} mahasiswa
-      </p>
+        <Link
+          to="/pmb"
+          className="inline-block rounded-lg bg-white px-6 py-3 font-semibold text-blue-700 hover:bg-blue-100"
+        >
+          Daftar Mahasiswa Baru
+        </Link>
+      </div>
 
-      <Link to="/pmb">
-        Daftar Mahasiswa Baru
-      </Link>
+      <div className="my-8 grid gap-5 md:grid-cols-2">
 
-      <hr />
+        <div className="rounded-lg border border-gray-200 p-6">
+          <h2 className="mb-2 text-lg font-semibold">
+            Informasi Pendaftar
+          </h2>
 
-      <h3>Cari Informasi</h3>
+          <p className="text-3xl font-bold text-blue-700">
+            {totalPendaftar}
+          </p>
 
-      <input
-        type="text"
-        placeholder="Cari informasi..."
-        value={pencarian}
-        onChange={(event) => setPencarian(event.target.value)}
-      />
+          <p className="text-gray-500">
+            Total pendaftar pada sesi aplikasi ini
+          </p>
+        </div>
 
-      <ul>
-        {hasilPencarian.length > 0 ? (
-          hasilPencarian.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))
-        ) : (
-          <p>Informasi tidak ditemukan.</p>
-        )}
-      </ul>
+        <div className="rounded-lg border border-gray-200 p-6">
+          <h2 className="mb-2 text-lg font-semibold">
+            Pendaftaran Mahasiswa
+          </h2>
+
+          <p className="mb-3 text-gray-600">
+            Silakan isi formulir untuk mendaftar sebagai mahasiswa baru.
+          </p>
+
+          <Link
+            to="/pmb"
+            className="font-medium text-blue-700 hover:underline"
+          >
+            Buka Formulir PMB →
+          </Link>
+        </div>
+
+      </div>
+
+      <div className="rounded-lg border border-gray-200 p-6">
+        <h2 className="mb-4 text-xl font-bold">
+          Cari Informasi Kampus
+        </h2>
+
+        <input
+          type="text"
+          value={pencarian}
+          onChange={(event) => setPencarian(event.target.value)}
+          placeholder="Cari informasi..."
+          className="mb-4 w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+        />
+
+        <ul className="list-inside list-disc space-y-2 text-gray-700">
+          {hasilPencarian.length > 0 ? (
+            hasilPencarian.map((item) => (
+              <li key={item}>{item}</li>
+            ))
+          ) : (
+            <li>Informasi tidak ditemukan.</li>
+          )}
+        </ul>
+      </div>
+
     </section>
   )
 }

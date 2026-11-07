@@ -14,7 +14,7 @@ const programStudi = [
 function App() {
   return (
     <main>
-      <h1>PMB STMIK Jayanusa</h1>
+      <h1>PMB Universitas Jayanusa</h1>
       <p>Penerimaan Mahasiswa Baru</p>
 
       <InsertData

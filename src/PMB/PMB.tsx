@@ -1,3 +1,4 @@
+
 import {
   useState,
   useEffect,
@@ -5,251 +6,284 @@ import {
   useRef,
   useReducer,
   useCallback,
-  useMemo,
-} from "react";
+  useMemo
+} from 'react'
 
-import { PendaftarContext } from "./PendaftarContext";
+import { PendaftarContext } from './PendaftarContext'
 
-// Data program studi
 const programStudi = [
-  "Sistem Komputer",
-  "Sistem Informasi",
-  "Manajemen Informatika",
-];
+  'Sistem Komputer',
+  'Sistem Informasi',
+  'Manajemen Informatika'
+]
 
-// Tipe data reducer
 type FormState = {
   berhasil: boolean;
   nama: string;
-};
+}
 
 type FormAction = {
-  type: "SUCCESS";
+  type: 'SUCCESS';
   nama: string;
-};
+}
 
-// Reducer untuk mengatur status form
-function formReducer(state: FormState, action: FormAction): FormState {
+function formReducer(
+  state: FormState,
+  action: FormAction
+): FormState {
   switch (action.type) {
-    case "SUCCESS":
+    case 'SUCCESS':
       return {
         berhasil: true,
-        nama: action.nama,
-      };
+        nama: action.nama
+      }
 
     default:
-      return state;
+      return state
   }
 }
 
 function PMB() {
-  // useState: menyimpan kata pencarian prodi
-  const [pencarian, setPencarian] = useState("");
+  const [pencarian, setPencarian] = useState('')
 
-  // useContext: mengambil fungsi dan jumlah pendaftar
-  const context = useContext(PendaftarContext);
+  const context = useContext(PendaftarContext)
 
   if (!context) {
-    throw new Error("PendaftarContext belum tersedia");
+    throw new Error('PendaftarContext belum tersedia')
   }
 
-  const { tambahPendaftar } = context;
+  const { tambahPendaftar } = context
 
-  // useRef: mengakses input nama secara langsung
-  const namaRef = useRef<HTMLInputElement>(null);
+  const namaRef = useRef<HTMLInputElement>(null)
 
-  // useReducer: mengelola status pendaftaran
   const [state, dispatch] = useReducer(formReducer, {
     berhasil: false,
-    nama: "",
-  });
+    nama: ''
+  })
 
-  // useEffect: mengatur judul halaman
   useEffect(() => {
-    document.title = "PMB - STMIK Jayanusa";
-  }, []);
+    document.title = 'PMB - Universitas Jayanusa'
+  }, [])
 
-  // useMemo: memfilter daftar program studi
   const hasilProdi = useMemo(() => {
     return programStudi.filter((prodi) =>
-      prodi.toLowerCase().includes(pencarian.toLowerCase()),
-    );
-  }, [pencarian]);
+      prodi.toLowerCase().includes(pencarian.toLowerCase())
+    )
+  }, [pencarian])
 
-  // useCallback: menyimpan fungsi submit
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+      event.preventDefault()
 
-      const form = event.currentTarget;
-      const formData = new FormData(form);
+      const form = event.currentTarget
+      const formData = new FormData(form)
 
       const dataMahasiswa = {
-        nama: formData.get("nama"),
-        nik: formData.get("nik"),
-        jenisKelamin: formData.get("jenisKelamin"),
-        alamat: formData.get("alamat"),
-        programStudi: formData.get("programStudi"),
-        email: formData.get("email"),
-        nomorHP: formData.get("nomorHP"),
-      };
+        nama: formData.get('nama'),
+        nik: formData.get('nik'),
+        jenisKelamin: formData.get('jenisKelamin'),
+        alamat: formData.get('alamat'),
+        programStudi: formData.get('programStudi'),
+        email: formData.get('email'),
+        nomorHP: formData.get('nomorHP')
+      }
 
-      console.log("DATA PENDAFTAR MAHASISWA:");
-      console.log(dataMahasiswa);
+      console.log('DATA PENDAFTAR MAHASISWA:')
+      console.log(dataMahasiswa)
 
-      // Menambah jumlah pendaftar di Context
-      tambahPendaftar();
+      tambahPendaftar()
 
-      // Mengubah status menggunakan reducer
       dispatch({
-        type: "SUCCESS",
-        nama: String(dataMahasiswa.nama),
-      });
+        type: 'SUCCESS',
+        nama: String(dataMahasiswa.nama)
+      })
 
-      // Mengosongkan form
-      form.reset();
+      form.reset()
+      setPencarian('')
     },
-    [tambahPendaftar],
-  );
+    [tambahPendaftar]
+  )
 
   return (
-    <section>
-      <h1>Pendaftaran Mahasiswa Baru</h1>
+    <section className="mx-auto max-w-3xl px-6 py-12">
 
-      <p>Silakan lengkapi formulir pendaftaran berikut.</p>
+      <div className="mb-8">
+        <h1 className="mb-2 text-3xl font-bold text-gray-800">
+          Pendaftaran Mahasiswa Baru
+        </h1>
 
-      <button type="button" onClick={() => namaRef.current?.focus()}>
-        Fokus ke Nama
-      </button>
+        <p className="text-gray-600">
+          Silakan lengkapi formulir pendaftaran berikut.
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        <label>Nama Lengkap</label>
-        <br />
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
 
-        <input
-          ref={namaRef}
-          type="text"
-          name="nama"
-          placeholder="Masukkan nama lengkap"
-          required
-        />
-
-        <br />
-        <br />
-
-        <label>NIK</label>
-        <br />
-
-        <input
-          type="text"
-          name="nik"
-          placeholder="Masukkan NIK"
-          minLength={16}
-          maxLength={16}
-          pattern="[0-9]{16}"
-          required
-        />
-
-        <br />
-        <br />
-
-        <label>Jenis Kelamin</label>
-        <br />
-
-        <select name="jenisKelamin" required>
-          <option value="">Pilih jenis kelamin</option>
-          <option value="Laki-laki">Laki-laki</option>
-          <option value="Perempuan">Perempuan</option>
-        </select>
-
-        <br />
-        <br />
-
-        <label>Alamat</label>
-        <br />
-
-        <textarea
-          name="alamat"
-          placeholder="Masukkan alamat lengkap"
-          required
-        />
-
-        <br />
-        <br />
-
-        <label>Cari Program Studi</label>
-        <br />
-
-        <input
-          type="text"
-          value={pencarian}
-          onChange={(event) => setPencarian(event.target.value)}
-          placeholder="Cari program studi..."
-        />
-
-        <br />
-        <br />
-
-        <label>Program Studi</label>
-        <br />
-
-        <select name="programStudi" required>
-          <option value="">Pilih program studi</option>
-
-          {hasilProdi.length > 0 ? (
-            hasilProdi.map((prodi) => (
-              <option key={prodi} value={prodi}>
-                {prodi}
-              </option>
-            ))
-          ) : (
-            <option value="" disabled>
-              Program studi tidak ditemukan
-            </option>
-          )}
-        </select>
-
-        <br />
-        <br />
-
-        <label>Email</label>
-        <br />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Masukkan email"
-          required
-        />
-
-        <br />
-        <br />
-
-        <label>Nomor HP</label>
-        <br />
-
-        <input
-          type="tel"
-          name="nomorHP"
-          placeholder="Masukkan nomor HP"
-          required
-        />
-
-        <br />
-        <br />
-
-        <button type="submit">Daftar Sekarang</button>
-      </form>
-
-      {/* Conditional Rendering */}
-      {state.berhasil && (
-        <div>
-          <h3>Pendaftaran Berhasil!</h3>
-          <p>Terima kasih, {state.nama}.</p>
+        <div className="mb-6">
+          <button
+            type="button"
+            onClick={() => namaRef.current?.focus()}
+            className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+          >
+            Fokus ke Nama
+          </button>
         </div>
-      )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          <div>
+            <label className="mb-2 block font-medium">
+              Nama Lengkap
+            </label>
+
+            <input
+              ref={namaRef}
+              type="text"
+              name="nama"
+              placeholder="Masukkan nama lengkap"
+              required
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block font-medium">
+              NIK
+            </label>
+
+            <input
+              type="text"
+              name="nik"
+              placeholder="Masukkan NIK"
+              minLength={16}
+              maxLength={16}
+              pattern="[0-9]{16}"
+              required
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block font-medium">
+              Jenis Kelamin
+            </label>
+
+            <select
+              name="jenisKelamin"
+              required
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-600"
+            >
+              <option value="">Pilih jenis kelamin</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block font-medium">
+              Alamat
+            </label>
+
+            <textarea
+              name="alamat"
+              placeholder="Masukkan alamat lengkap"
+              required
+              className="min-h-28 w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block font-medium">
+              Cari Program Studi
+            </label>
+
+            <input
+              type="text"
+              value={pencarian}
+              onChange={(event) => setPencarian(event.target.value)}
+              placeholder="Cari program studi..."
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block font-medium">
+              Program Studi
+            </label>
+
+            <select
+              name="programStudi"
+              required
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-blue-600"
+            >
+              <option value="">Pilih program studi</option>
+
+              {hasilProdi.length > 0 ? (
+                hasilProdi.map((prodi) => (
+                  <option key={prodi} value={prodi}>
+                    {prodi}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  Program studi tidak ditemukan
+                </option>
+              )}
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block font-medium">
+              Email
+            </label>
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Masukkan email"
+              required
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block font-medium">
+              Nomor HP
+            </label>
+
+            <input
+              type="tel"
+              name="nomorHP"
+              placeholder="Masukkan nomor HP"
+              required
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white hover:bg-blue-800"
+          >
+            Daftar Sekarang
+          </button>
+
+        </form>
+
+        {state.berhasil && (
+          <div className="mt-6 rounded-lg bg-green-50 p-4 text-green-800">
+            <h3 className="font-bold">
+              Pendaftaran Berhasil!
+            </h3>
+
+            <p>
+              Terima kasih, {state.nama}.
+            </p>
+          </div>
+        )}
+
+      </div>
     </section>
-  );
+  )
 }
 
-export default PMB;
+export default PMB
